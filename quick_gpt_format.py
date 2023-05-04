@@ -1,23 +1,19 @@
 import os
 import datetime
 
-ignore_dirs = {'.git'}
-ignore_files = {'.env'}
-
 def parse_directory(directory_path):
-    code_blocks = []
+    ignore_files = ['.gitignore']
+    ignore_dirs = ['.git']
     total_chars = 0
+    files = []  
 
     for root, dirs, file_names in os.walk(directory_path):
         dirs[:] = [d for d in dirs if d not in ignore_dirs]
-
         for file_name in file_names:
-            if file_name in ignore_files:
+            if file_name in ignore_files: 
                 continue
-
             file_path = os.path.join(root, file_name)
             relative_dir = os.path.relpath(root, start=directory_path)
-
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
                 contents = file.read()
                 total_chars += len(contents)
@@ -30,16 +26,16 @@ def parse_directory(directory_path):
                             end -= 1
                         end += 1  # Include the newline character in the current part
                         part = contents[start:end].strip()
-                        code_block = f"``` {relative_dir}/{file_name}.{'continued' if start > 0 else ''}\n{part}\n```\n"
-                        code_blocks.append(code_block)
+                        obj = f"``` {relative_dir}/{file_name}.{'continued' if start > 0 else ''}\n{part}\n```\n"
+                        files.append(obj)
                         start = end
                         end += 6000
                 else:
-                    code_block = f"``` {relative_dir}/{file_name}\n{contents}\n```\n"
-                    code_blocks.append(code_block)
-
+                    obj = f"``` {relative_dir}/{file_name}\n{contents}\n```\n"
+                    files.append(obj)
     print(f"Total number of characters: {total_chars}")
-    return code_blocks
+    return files
+
 
 
 def write_code_blocks_to_files(code_blocks):
@@ -49,6 +45,7 @@ def write_code_blocks_to_files(code_blocks):
     current_file = ""
     current_file_length = 0
     file_index = 1
+    
 
     for code_block in code_blocks:
         if current_file_length + len(code_block) > 30000:
@@ -70,5 +67,5 @@ def write_code_blocks_to_files(code_blocks):
 
 
 if __name__ == '__main__':
-    code_blocks = parse_directory('./')
-    write_code_blocks_to_files(code_blocks)
+    objects = parse_directory('./')
+    write_code_blocks_to_files(objects)
