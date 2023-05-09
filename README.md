@@ -25,3 +25,8 @@ python quick_gpt_format.py
 
 # Contributions
 We welcome contributions! Feel free to open issues or submit pull requests for improvements, bug fixes, or new features.
+
+# Future
+- Add OpenAi API Integration to send off codebase directly to OpenAi GPT
+- Add Embeddings to Convert Larger codebases directly into a Long-Term Memory Format
+- Add Vector Database Integration to manage Embeddings
